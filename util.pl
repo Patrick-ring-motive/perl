@@ -1,5 +1,5 @@
 sub println{
-  print(@_,"\n");
+  print(join(", ",@_),"\n");
 } 
 
 1;
