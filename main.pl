@@ -21,6 +21,7 @@ $testArr = $arr->map(sub{return @_[0]*3});
 println($testArr->join(","));
 
 $testArr->push(7,7,7,7);
+println("testArr has 7?",$testArr->includes(7));
 println($testArr->join(','));
 println($testArr->uniq()->join(','));
 println($testArr->reduce(sub{return ($_[0]+$_[1]);}));

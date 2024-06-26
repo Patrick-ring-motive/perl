@@ -1,8 +1,10 @@
+
 package JavaScript;
 
 1;
 
 package Array;
+require "util.pm";
 
 sub new {
     my $class = shift;
@@ -79,6 +81,17 @@ sub reduce {
    $i++;
  }
  return $x;
+}
+sub includes {
+ my ($self) = shift(@_);
+ my $test = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ foreach my $v (@arrValues) {
+   if($v == $test){
+     return $true;
+   }
+ }
+ return $false;
 }
 sub uniq {
   my ($self) = shift(@_);
