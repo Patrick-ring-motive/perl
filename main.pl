@@ -26,5 +26,5 @@ println($testArr->join(','));
 println($testArr->uniq()->join(','));
 println($testArr->reduce(sub{return ($_[0]+$_[1]);}));
 println($testArr->length);
-
+#println(fetch("https://www.google.com"));
 1;
