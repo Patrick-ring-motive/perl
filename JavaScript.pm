@@ -67,6 +67,22 @@ sub map {
  }
  return $mapped;
 }
+
+sub filter {
+ my ($self) = shift(@_);
+ my $lambda = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ my $filtered = Array->new();
+ my $i=0;
+ foreach my $v (@arrValues) {
+  if(&{$lambda}($v,$i,@arrValues)){
+     $filtered->push($v);
+   }
+   $i++;
+ }
+ return $filtered;
+}
+
 sub reduce {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
