@@ -67,7 +67,25 @@ sub map {
  }
  return $mapped;
 }
-
+sub reverse {
+ my ($self) = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ my $reversed = Array->new();
+ foreach my $v (@arrValues) {
+   $reversed->unshift($v);
+ }
+ return $reversed;
+}
+sub forEach {
+ my ($self) = shift(@_);
+ my $lambda = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ my $i=0;
+ foreach my $v (@arrValues) {
+   &{$lambda}($v,$i,@arrValues);
+   $i++;
+ }
+}
 sub filter {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -82,7 +100,6 @@ sub filter {
  }
  return $filtered;
 }
-
 sub reduce {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -108,6 +125,24 @@ sub includes {
    }
  }
  return $false;
+}
+sub indexOf {
+ my ($self) = shift(@_);
+ my $test = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ my $i=0;
+ foreach my $v (@arrValues) {
+   if($v == $test){
+     return $i
+   }
+   $i++;
+ }
+ return -1;
+}
+sub lastIndexOf {
+ my ($self) = shift(@_);
+ my $test = shift(@_);
+ return $self->length-$self->reverse()->indexOf($test);
 }
 sub uniq {
   my ($self) = shift(@_);
