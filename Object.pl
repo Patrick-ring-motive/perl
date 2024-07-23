@@ -1,0 +1,5 @@
+#Object.is()
+#Object.keys()
+#Object.values()
+#Object.entries()
+#Object.prototype.toString()
