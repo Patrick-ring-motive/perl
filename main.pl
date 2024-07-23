@@ -5,10 +5,15 @@ use JavaScript;
 
 my $arr = Array->new(7,8,9);
 $arr->push(5,6,7);
-my @arrValues = @{$arr->values()};
-
+my @arrValues = $arr->values();
+my @arrKeys = $arr->keys();
+println('values');
 foreach my $v (@arrValues) {
   println($v);
+}
+println('keys');
+foreach my $k (@arrKeys) {
+  println($k);
 }
 
 println($arr->pop());
@@ -28,6 +33,11 @@ println($testArr->indexOf(37));
 println($testArr->join(','));
 println($testArr->uniq()->join(','));
 println($testArr->reduce(sub{return ($_[0]+$_[1]);}));
-println($testArr->length);
-#println(fetch("https://www.google.com"));
+println($testArr->concat($arr)->join(","));
+
+$testSet=Set->new();
+
+$testSet->add(7);
+println($testSet);
+
 1;
