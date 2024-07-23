@@ -10,23 +10,20 @@ sub new {
     bless $self, $class;
     return $self;
 }
+sub constructor {
+    return new(@_);
+}
 sub type {
   return "Set";
 }
+
+#set
+#get
 sub size {
     my ($self) = shift(@_);
     return ~~@{keys(%{$self->{_set}})};
 }
-sub values {
-    my ($self) = @_;
-    return @{keys(%{$self->{_set}})};
-}
-sub concat {
-    my ($self) = shift(@_);
-    my $arr = shift(@_);
-    $self->add(@{$arr->values()}); 
-    return $self;
-}
+
 sub add {
     my ($self) = shift(@_);
     my @ar = @_;
@@ -35,28 +32,20 @@ sub add {
     }
     return $self;
 }
+sub concat {
+    my ($self) = shift(@_);
+    my $arr = shift(@_);
+    $self->add(@{$arr->values()}); 
+    return $self;
+}
+#Set.prototype.clear()
 sub delete {
     my ($self) = shift(@_);
     my $key = shift(@_);
     delete(%{$self->{_set}}{$key});
 }
-sub join{
-    my ($self) = shift(@_);
-    my $joiner = shift(@_);
-    return join($joiner,@{keys(%{$self->{_set}})});
-}
-sub map {
- my ($self) = shift(@_);
- my $lambda = shift(@_);
- my @arrValues = @{keys(%{$self->{_set}})};
- my $mapped = Set->new();
- my $i=0;
- foreach my $v (@arrValues) {
-   $mapped->add(&{$lambda}($v,$i,@arrValues));
-   $i++;
- }
- return $mapped;
-}
+#Set.prototype.difference()
+#Set.prototype.entries()
 sub forEach {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -81,6 +70,40 @@ sub filter {
  }
  return $filtered;
 }
+#Set.prototype.has()
+sub includes {
+ my ($self) = shift(@_);
+ my $test = shift(@_);
+ my @arrValues = @{keys(%{$self->{_set}})};
+ foreach my $v (@arrValues) {
+   if($v == $test){
+     return $true;
+   }
+ }
+ return $false;
+}
+#Set.prototype.intersection()
+#Set.prototype.isDisjointFrom()
+#Set.prototype.isSubsetOf()
+#Set.prototype.isSupersetOf()
+sub join{
+    my ($self) = shift(@_);
+    my $joiner = shift(@_);
+    return join($joiner,@{keys(%{$self->{_set}})});
+}
+#Set.prototype.keys()
+sub map {
+ my ($self) = shift(@_);
+ my $lambda = shift(@_);
+ my @arrValues = @{keys(%{$self->{_set}})};
+ my $mapped = Set->new();
+ my $i=0;
+ foreach my $v (@arrValues) {
+   $mapped->add(&{$lambda}($v,$i,@arrValues));
+   $i++;
+ }
+ return $mapped;
+}
 sub reduce {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -96,17 +119,13 @@ sub reduce {
  }
  return $x;
 }
-sub includes {
- my ($self) = shift(@_);
- my $test = shift(@_);
- my @arrValues = @{keys(%{$self->{_set}})};
- foreach my $v (@arrValues) {
-   if($v == $test){
-     return $true;
-   }
- }
- return $false;
+#Set.prototype.symmetricDifference()
+#Set.prototype.union()
+sub values {
+    my ($self) = @_;
+    return @{keys(%{$self->{_set}})};
 }
 
 1;
+
 

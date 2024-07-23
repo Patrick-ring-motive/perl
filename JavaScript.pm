@@ -56,6 +56,10 @@ sub concat {
     push(@{$self->{_arr}}, @{$arr->values()}); 
     return $self;
 }
+#Array.prototype.copyWithin()
+#Array.prototype.entries()
+#Array.prototype.every()
+#Array.prototype.fill()
 sub filter {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -70,6 +74,12 @@ sub filter {
  }
  return $filtered;
 }
+#Array.prototype.find()
+#Array.prototype.findIndex()
+#Array.prototype.findLast()
+#Array.prototype.findLastIndex()
+#Array.prototype.flat()
+#Array.prototype.flatMap()
 sub forEach {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -145,28 +155,6 @@ sub pop {
     my ($self) = shift(@_);
     return pop(@{$self->{_arr}});
 }
-sub unshift {
-    my ($self) = shift(@_);
-    unshift(@{$self->{_arr}}, @_);
-    return $self;
-}
-sub shift {
-    my ($self) = shift(@_);
-    return shift(@{$self->{_arr}});
-}
-sub values {
-    my ($self) = @_;
-    return @{$self->{_arr}};
-}
-sub reverse {
- my ($self) = shift(@_);
- my @arrValues = @{$self->{_arr}};
- my $reversed = Array->new();
- foreach my $v (@arrValues) {
-   $reversed->unshift($v);
- }
- return $reversed;
-}
 sub reduce {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -182,45 +170,25 @@ sub reduce {
  }
  return $x;
 }
-sub uniq {
-  my ($self) = shift(@_);
-  my %set;
-  my @arrValues = @{$self->{_arr}};
-  foreach my $v (@arrValues){
-    $set{$v} = 1;
-  }
-  return Array->new(keys(%set))
-}
-
-1;
-
-#methods
-#Array.prototype.at()✅
-#Array.prototype.concat()✅
-#Array.prototype.copyWithin()
-#Array.prototype.entries()
-#Array.prototype.every()
-#Array.prototype.fill()
-#Array.prototype.filter()✅
-#Array.prototype.find()
-#Array.prototype.findIndex()
-#Array.prototype.findLast()
-#Array.prototype.findLastIndex()
-#Array.prototype.flat()
-#Array.prototype.flatMap()
-#Array.prototype.forEach()✅
-#Array.prototype.includes()✅
-#Array.prototype.indexOf()✅
-#Array.prototype.join()✅
-#Array.prototype.keys()
-#Array.prototype.lastIndexOf()✅
-#Array.prototype.map()✅
-#Array.prototype.pop()✅
-#Array.prototype.push()✅
-#Array.prototype.reduce()✅
 #Array.prototype.reduceRight()
-#Array.prototype.reverse()✅
-#Array.prototype.shift()✅
+sub reverse {
+ my ($self) = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ my $reversed = Array->new();
+ foreach my $v (@arrValues) {
+   $reversed->unshift($v);
+ }
+ return $reversed;
+}
+sub shift {
+    my ($self) = shift(@_);
+    return shift(@{$self->{_arr}});
+}
+sub unshift {
+    my ($self) = shift(@_);
+    unshift(@{$self->{_arr}}, @_);
+    return $self;
+}
 #Array.prototype.slice()
 #Array.prototype.some()
 #Array.prototype.sort()
@@ -231,9 +199,22 @@ sub uniq {
 #Array.prototype.toSorted()
 #Array.prototype.toSpliced()
 #Array.prototype.toString()
-#Array.prototype.unshift()✅
-#Array.prototype.values()✅
+sub uniq {
+  my ($self) = shift(@_);
+  my %set;
+  my @arrValues = @{$self->{_arr}};
+  foreach my $v (@arrValues){
+    $set{$v} = 1;
+  }
+  return Array->new(keys(%set))
+}
+sub values {
+    my ($self) = @_;
+    return @{$self->{_arr}};
+}
 #Array.prototype.with()
+1;
+
 package Set;
 require "util.pm";
 
@@ -245,23 +226,20 @@ sub new {
     bless $self, $class;
     return $self;
 }
+sub constructor {
+    return new(@_);
+}
 sub type {
   return "Set";
 }
+
+#set
+#get
 sub size {
     my ($self) = shift(@_);
     return ~~@{keys(%{$self->{_set}})};
 }
-sub values {
-    my ($self) = @_;
-    return @{keys(%{$self->{_set}})};
-}
-sub concat {
-    my ($self) = shift(@_);
-    my $arr = shift(@_);
-    $self->add(@{$arr->values()}); 
-    return $self;
-}
+
 sub add {
     my ($self) = shift(@_);
     my @ar = @_;
@@ -270,28 +248,20 @@ sub add {
     }
     return $self;
 }
+sub concat {
+    my ($self) = shift(@_);
+    my $arr = shift(@_);
+    $self->add(@{$arr->values()}); 
+    return $self;
+}
+#Set.prototype.clear()
 sub delete {
     my ($self) = shift(@_);
     my $key = shift(@_);
     delete(%{$self->{_set}}{$key});
 }
-sub join{
-    my ($self) = shift(@_);
-    my $joiner = shift(@_);
-    return join($joiner,@{keys(%{$self->{_set}})});
-}
-sub map {
- my ($self) = shift(@_);
- my $lambda = shift(@_);
- my @arrValues = @{keys(%{$self->{_set}})};
- my $mapped = Set->new();
- my $i=0;
- foreach my $v (@arrValues) {
-   $mapped->add(&{$lambda}($v,$i,@arrValues));
-   $i++;
- }
- return $mapped;
-}
+#Set.prototype.difference()
+#Set.prototype.entries()
 sub forEach {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -316,6 +286,40 @@ sub filter {
  }
  return $filtered;
 }
+#Set.prototype.has()
+sub includes {
+ my ($self) = shift(@_);
+ my $test = shift(@_);
+ my @arrValues = @{keys(%{$self->{_set}})};
+ foreach my $v (@arrValues) {
+   if($v == $test){
+     return $true;
+   }
+ }
+ return $false;
+}
+#Set.prototype.intersection()
+#Set.prototype.isDisjointFrom()
+#Set.prototype.isSubsetOf()
+#Set.prototype.isSupersetOf()
+sub join{
+    my ($self) = shift(@_);
+    my $joiner = shift(@_);
+    return join($joiner,@{keys(%{$self->{_set}})});
+}
+#Set.prototype.keys()
+sub map {
+ my ($self) = shift(@_);
+ my $lambda = shift(@_);
+ my @arrValues = @{keys(%{$self->{_set}})};
+ my $mapped = Set->new();
+ my $i=0;
+ foreach my $v (@arrValues) {
+   $mapped->add(&{$lambda}($v,$i,@arrValues));
+   $i++;
+ }
+ return $mapped;
+}
 sub reduce {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -331,17 +335,13 @@ sub reduce {
  }
  return $x;
 }
-sub includes {
- my ($self) = shift(@_);
- my $test = shift(@_);
- my @arrValues = @{keys(%{$self->{_set}})};
- foreach my $v (@arrValues) {
-   if($v == $test){
-     return $true;
-   }
- }
- return $false;
+#Set.prototype.symmetricDifference()
+#Set.prototype.union()
+sub values {
+    my ($self) = @_;
+    return @{keys(%{$self->{_set}})};
 }
 
 1;
+
 
