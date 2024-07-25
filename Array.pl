@@ -1,5 +1,4 @@
 package Array;
-require "util.pm";
 
 sub new {
     my $class = shift;
@@ -41,10 +40,69 @@ sub concat {
     push(@{$self->{_arr}}, @{$arr->values()}); 
     return $self;
 }
-#Array.prototype.copyWithin()
-#Array.prototype.entries()
-#Array.prototype.every()
-#Array.prototype.fill()
+sub copyWithin {
+    my ($self) = shift(@_);
+    my $target = shift(@_);
+    my $start = shift(@_);
+    my $end = shift(@_);
+    if(not $end){
+        $end = $self->length + 1;
+    }
+    my $index = 0;
+    my $targetIndex = $target;
+    my @arrValues = @{$self->{_arr}};
+    foreach my $v (@arrValues) {
+       if($index >= $start && $index < $end){
+           $self->set($targetIndex,$v);
+           $targetIndex++;
+       }
+       $index++;
+     }
+     return $self
+}
+sub entries {
+ my ($self) = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ my $entries = Array->new();
+ my $i=0;
+ foreach my $v (@arrValues) {
+   $entries->push(Array->new($i,$v));
+   $i++;
+ }
+ return $entries;
+}
+sub every {
+ my ($self) = shift(@_);
+ my $lambda = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ foreach my $v (@arrValues) {
+  if(not(&{$lambda}($v,$i,@arrValues))){
+     return 0;
+   }
+ }
+ return 1;
+}
+sub fill {
+    my ($self) = shift(@_);
+    my $fill = shift(@_);
+    my $start = shift(@_);
+    if(not $start){
+        $start = 0;
+    }
+    my $end = shift(@_);
+    if(not $end){
+        $end = $self->length + 1;
+    }
+    my $index = 0;
+    my @arrValues = @{$self->{_arr}};
+    foreach my $v (@arrValues) {
+       if($index >= $start && $index < $end){
+           $self->set($index,$fill);
+       }
+       $index++;
+     }
+     return $self
+}
 sub filter {
  my ($self) = shift(@_);
  my $lambda = shift(@_);
@@ -59,12 +117,66 @@ sub filter {
  }
  return $filtered;
 }
-#Array.prototype.find()
-#Array.prototype.findIndex()
-#Array.prototype.findLast()
-#Array.prototype.findLastIndex()
-#Array.prototype.flat()
-#Array.prototype.flatMap()
+sub find {
+ my ($self) = shift(@_);
+ my $lambda = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ foreach my $v (@arrValues) {
+  if(&{$lambda}($v,$i,@arrValues)){
+     return $v;
+   }
+ }
+}
+sub findIndex {
+ my ($self) = shift(@_);
+ my $lambda = shift(@_);
+ my @arrValues = @{$self->{_arr}};
+ my $i = 0;
+ foreach my $v (@arrValues) {
+  if(&{$lambda}($v,$i,@arrValues)){
+     return $i;
+   }
+   $i++;
+ }
+}
+sub findLast {
+    my ($self) = shift(@_);
+    return $self->reverse()->find(@_);
+}
+sub findLastIndex {
+    my ($self) = shift(@_);
+    return $self->reverse()->findIndex(@_);
+}
+sub flat {
+ my ($self) = shift(@_);
+ my $depth = shift(@_);
+ my $flat = Array->new();
+ my @arrValues = @{$self->{_arr}};
+ foreach my $v (@arrValues) {
+   if(ref($v) == 'ARRAY'){
+     my @arr = @{$v};
+     foreach my $x (@arr) {
+       $flat->push($x);
+     }
+     next;
+   }
+    if($v->type == 'Array'){
+      my @arr = @{$v->{_arr}};
+      foreach my $x (@arr) {
+        $flat->push($x);
+      }
+      next;
+    }
+    $flat->push($v);
+ }
+ if($depth > 1){
+   return $flat->flat($depth-1);
+ }
+ return $flat;
+}
+sub flatMap {
+    return map(@_)->flat();
+}
 sub forEach {
  my ($self) = shift(@_);
  my $lambda = shift(@_);

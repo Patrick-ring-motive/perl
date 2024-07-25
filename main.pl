@@ -18,6 +18,8 @@ foreach my $k (@arrKeys) {
 
 println($arr->pop());
 println($arr->get(3));
+$arr->set(3,"cheese");
+println($arr->get(3));
 foreach my $v (@{$arr->values()}) {
   print($v,"-2\n");
 }
